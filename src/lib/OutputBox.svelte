@@ -20,7 +20,6 @@
     .input-box {
       background-color: #191B1E;
       font-family: 'Red Hat Display';
-      width: 400px;
       padding: 28px;
       border-radius: 4px;
       box-shadow: 0 0 10px rgba(0, 0, 0, .1);
@@ -44,9 +43,5 @@
     .text {
       color: white;
       margin-bottom: 20px;
-    }
-    .action {
-      display: flex;
-      justify-content: flex-end;
     }
   </style>
