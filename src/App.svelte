@@ -14,7 +14,9 @@
   </div>
   <div class="illustration"><Illustration /></div>
 </main>
-<!-- <Waves /> -->
+<div class="waves">
+  <Waves />
+</div>
 
 <style>
   .main {
@@ -27,5 +29,9 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+  }
+  .waves {
+    width: 100%;
+    overflow: hidden;
   }
 </style>
