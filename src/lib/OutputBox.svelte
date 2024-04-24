@@ -2,6 +2,9 @@
     import Voice from "./Voice.svelte"
     import Share from "./Share.svelte";
     import Copy from "./Copy.svelte";
+    import {outputText} from './../store'
+
+
   </script>
   
   <div class="input-box">
@@ -13,7 +16,7 @@
       <div class="share"><Share/></div>
       <div class="copy"><Copy/></div>
     </div>
-    <div class="text">I enjoy exploring new places and experiencing different cultures. Traveling allows me to broaden my horizons and gain a deeper understanding of the world around me</div>
+    <div class="text">{$outputText}</div>
   </div>
   
   <style>
