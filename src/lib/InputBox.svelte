@@ -8,21 +8,22 @@
   let inputdata = "";
 
   const getTranslatedText = async () => {
-    if(inputdata != "") {
+    outputText.set('Translating...')
+    if (inputdata != "") {
       fetch(`http://127.0.0.1:3000/${inputdata}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data)
-        outputText.set(data)
-      })
-      .catch((error) =>
-        console.error("There was a problem with your fetch operation:", error)
-      );
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          outputText.set(data);
+        })
+        .catch((error) =>
+          console.error("There was a problem with your fetch operation:", error)
+        );
     }
   };
 </script>
@@ -85,6 +86,12 @@
     margin-bottom: 20px;
     background-color: transparent;
     border-style: none;
+    font-family: "Red Hat Display";
+    /* outline: none; */
+    padding: 12px;
+    resize: vertical;
+
+    font-size: 16px;
   }
   .action {
     display: flex;
@@ -101,5 +108,17 @@
   }
   .button:hover {
     background-color: #c44135;
+  }
+  .text::selection {
+    background: #b9b9b9;
+    color: #000000;
+  }
+  .text::-moz-selection {
+    background: #b9b9b9;
+    color: #000000;
+  }
+  .text::-webkit-selection {
+    background: #b9b9b9;
+    color: #000000;
   }
 </style>
