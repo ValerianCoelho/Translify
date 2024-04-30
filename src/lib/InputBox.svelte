@@ -1,60 +1,65 @@
 <script>
-  import Voice from "./Voice.svelte"
+  import Voice from "./Voice.svelte";
   import Share from "./Share.svelte";
   import Copy from "./Copy.svelte";
-  import {outputText} from "./../store"
+  import { outputText } from "./../store";
 
-  let placeholderText= "Enter something"
-  let inputdata = ""
+  let placeholderText = "Enter something";
+  let inputdata = "";
 
-
-  const getTranslatedText = async ()=>{
-
-    outputText.set("Loading...")
-
-    if(inputdata){
-    const data = await fetch("http://localhost:5000/translate",{
-      method:"POST",
-      headers:{
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify({
-        text:inputdata
+  const getTranslatedText = async () => {
+    if(inputdata != "") {
+      fetch(`http://127.0.0.1:3000/${inputdata}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
       })
-    })
-    if(data.ok){
-      const translatedData = await data.text()
-      outputText.set(translatedData)
+      .then((data) => {
+        console.log(data)
+        outputText.set(data)
+      })
+      .catch((error) =>
+        console.error("There was a problem with your fetch operation:", error)
+      );
     }
-  }
-  }
-
+  };
 </script>
 
 <div class="input-box">
   <div class="tools">
     <div class="lang">
-      <div class="icon"><Voice/></div>
+      <div class="icon"><Voice /></div>
       <div class="name">English</div>
     </div>
-    <div class="share"><Share/></div>
-    <div class="copy"><Copy/></div>
+    <div class="share"><Share /></div>
+    <div class="copy"><Copy /></div>
   </div>
-  <textarea class="text" placeholder={placeholderText} bind:value={inputdata} cols="40" rows="5"/>
+  <textarea
+    class="text"
+    placeholder={placeholderText}
+    bind:value={inputdata}
+    cols="40"
+    rows="5"
+  />
   <div class="action">
-    <button class="button" on:click={()=>{
-      getTranslatedText()
-    }}>Translate</button>
+    <button
+      class="button"
+      on:click={() => {
+        getTranslatedText();
+      }}>Translate</button
+    >
   </div>
 </div>
 
 <style>
   .input-box {
-    background-color: #191B1E;
-    font-family: 'Red Hat Display';
+    background-color: #191b1e;
+    font-family: "Red Hat Display";
     padding: 28px;
     border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   .tools {
     display: flex;
@@ -67,12 +72,15 @@
     flex: 1;
   }
   .name {
-    color: #DB4D45;
+    color: #db4d45;
   }
   .share {
     margin-right: 8px;
   }
-  .text ,.text:focus,.text::selection,.text:active{
+  .text,
+  .text:focus,
+  .text::selection,
+  .text:active {
     color: white;
     margin-bottom: 20px;
     background-color: transparent;
@@ -84,7 +92,7 @@
   }
   .button {
     color: white;
-    background-color: #EF4E40;
+    background-color: #ef4e40;
     padding: 8px 18px;
     border: none;
     outline: none;
