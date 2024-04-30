@@ -2,6 +2,33 @@
   import Voice from "./Voice.svelte"
   import Share from "./Share.svelte";
   import Copy from "./Copy.svelte";
+  import {outputText} from "./../store"
+
+  let placeholderText= "Enter something"
+  let inputdata = ""
+
+
+  const getTranslatedText = async ()=>{
+
+    outputText.set("Loading...")
+
+    if(inputdata){
+    const data = await fetch("http://localhost:5000/translate",{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        text:inputdata
+      })
+    })
+    if(data.ok){
+      const translatedData = await data.text()
+      outputText.set(translatedData)
+    }
+  }
+  }
+
 </script>
 
 <div class="input-box">
@@ -13,9 +40,11 @@
     <div class="share"><Share/></div>
     <div class="copy"><Copy/></div>
   </div>
-  <div class="text">I enjoy exploring new places and experiencing different cultures. Traveling allows me to broaden my horizons and gain a deeper understanding of the world around me</div>
+  <textarea class="text" placeholder={placeholderText} bind:value={inputdata} cols="40" rows="5"/>
   <div class="action">
-    <button class="button">Translate</button>
+    <button class="button" on:click={()=>{
+      getTranslatedText()
+    }}>Translate</button>
   </div>
 </div>
 
@@ -43,9 +72,11 @@
   .share {
     margin-right: 8px;
   }
-  .text {
+  .text ,.text:focus,.text::selection,.text:active{
     color: white;
     margin-bottom: 20px;
+    background-color: transparent;
+    border-style: none;
   }
   .action {
     display: flex;
