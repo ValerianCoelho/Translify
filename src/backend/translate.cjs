@@ -18,6 +18,7 @@ const translate = async (text) => {
         const translatedText = await page.evaluate(() => {
           const textarea = document.querySelector("#TargetTextarea");
           if (textarea) {
+            // @ts-ignore
             return textarea.value;
           }
           return ""; // If no textarea is found, return an empty string
@@ -27,7 +28,6 @@ const translate = async (text) => {
           clearInterval(interval);
           resolve(translatedText);
         } else {
-          console.log("Translating...");
         }
       }, 100); // Slightly increase the interval time to reduce load
     });

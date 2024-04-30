@@ -4,6 +4,18 @@
   import OutputBox from "./lib/OutputBox.svelte";
   import Illustration from "./lib/Illustration.svelte";
   import Waves from "./lib/Waves.svelte";
+
+  fetch("http://127.0.0.1:3000/How%20are%20you")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => console.log(data))
+    .catch((error) =>
+      console.error("There was a problem with your fetch operation:", error)
+    );
 </script>
 
 <Title />
