@@ -3,27 +3,39 @@
   import Share from "./Share.svelte";
   import Copy from "./Copy.svelte";
   import { outputText } from "./../store";
+  import { translatingMsg, networkErrorMsg, slowConnectionMsg, translationErrorMsg } from "./constants";
 
   let placeholderText = "Enter something";
   let inputdata = "";
 
   const getTranslatedText = async () => {
-    outputText.set('Translating...')
+    outputText.set(translatingMsg);
+    let timeoutFlag = false;
+
+    // Set a timeout to change the outputText to "Slow Network" after 2 seconds
+    const timeoutId = setTimeout(() => {
+      timeoutFlag = true;
+      outputText.set(slowConnectionMsg);
+    }, 2000);
+
     if (inputdata != "") {
       fetch(`http://127.0.0.1:3000/${inputdata}`)
         .then((response) => {
+          clearTimeout(timeoutId); // Clear the timeout if the fetch succeeds
           if (!response.ok) {
+            outputText.set(translationErrorMsg)
             throw new Error("Network response was not ok");
           }
           return response.json();
         })
         .then((data) => {
-          console.log(data);
           outputText.set(data);
         })
-        .catch((error) =>
-          console.error("There was a problem with your fetch operation:", error)
-        );
+        .catch((error) => {
+          outputText.set(networkErrorMsg);
+        });
+    } else {
+      clearTimeout(timeoutId); // Clear the timeout if input data is empty
     }
   };
 </script>
