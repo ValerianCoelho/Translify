@@ -1,26 +1,64 @@
 const http = require("http");
-const translate = require('./translate.cjs')
+const puppeteer = require('puppeteer');
+
+const translate = async (page, text) => {
+  try {
+    await page.waitForSelector("#SourceTextarea");
+    await page.type("#SourceTextarea", text);
+    await page.click("#SubmitTranslation");
+
+    const result = await new Promise(async (resolve) => {
+      const interval = setInterval(async () => {
+        const translatedText = await page.evaluate(() => {
+          const textarea = document.querySelector("#TargetTextarea");
+          if (textarea) {
+            // @ts-ignore
+            return textarea.value;
+          }
+          return ""; 
+        });
+
+        if (translatedText !== "") {
+          clearInterval(interval);
+          resolve(translatedText);
+        }
+      }, 100); 
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 
 const hostname = "127.0.0.1";
 const port = 3000;
 
+let browser, page;
+
 const server = http.createServer(async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173'); // Adjust as needed
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === "GET") {
-    const text = req.url.replace(/%20/g, " ").replace("/", "");
-    const translatedText = await translate(text);
-    res.end(JSON.stringify(translatedText))
+    const text = decodeURIComponent(req.url.slice(1)); // Improved decoding
+    const translatedText = await translate(page, text);
+    res.end(JSON.stringify(translatedText));
   } else {
-    // Only GET method is supported
     res.statusCode = 405;
     res.end("Method Not Allowed\n");
   }
 });
 
-// Start the server
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+(async () => {
+  browser = await puppeteer.launch({ headless: true });
+  page = await browser.newPage();
+  await page.goto("https://www.easyhindityping.com/english-to-konkani-translation");
+  
+  server.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+  });
+})();
