@@ -4,6 +4,12 @@ const puppeteer = require('puppeteer');
 const translate = async (page, text) => {
   try {
     await page.waitForSelector("#SourceTextarea");
+    await page.evaluate(() => {
+      const textarea = document.querySelector("#SourceTextarea");
+      if (textarea) {
+        textarea.value = "";
+      }
+    });
     await page.type("#SourceTextarea", text);
     await page.click("#SubmitTranslation");
 
@@ -18,7 +24,8 @@ const translate = async (page, text) => {
           return ""; 
         });
 
-        if (translatedText !== "") {
+        if ( translatedText !== "" && translatedText !== prevText ) {
+          prevText = translatedText;
           clearInterval(interval);
           resolve(translatedText);
         }
@@ -36,7 +43,7 @@ const translate = async (page, text) => {
 const hostname = "127.0.0.1";
 const port = 3000;
 
-let browser, page;
+let browser, page,prevText='';
 
 const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
@@ -54,7 +61,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 (async () => {
-  browser = await puppeteer.launch({ headless: true });
+  browser = await puppeteer.launch({ headless: false });
   page = await browser.newPage();
   await page.goto("https://www.easyhindityping.com/english-to-konkani-translation");
   
