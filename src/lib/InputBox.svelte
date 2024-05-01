@@ -53,7 +53,6 @@
     class="text"
     placeholder={placeholderText}
     bind:value={inputdata}
-    cols="40"
     rows="5"
   />
   <div class="action">
@@ -104,6 +103,7 @@
     resize: vertical;
 
     font-size: 16px;
+    width: calc(100% - 28px);
   }
   .action {
     display: flex;
