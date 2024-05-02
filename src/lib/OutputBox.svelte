@@ -53,4 +53,16 @@
     color: white;
     margin-bottom: 20px;
   }
+  .text::selection {
+    background: #b9b9b9;
+    color: #000000;
+  }
+  .text::-moz-selection {
+    background: #b9b9b9;
+    color: #000000;
+  }
+  .text::-webkit-selection {
+    background: #b9b9b9;
+    color: #000000;
+  }
 </style>
