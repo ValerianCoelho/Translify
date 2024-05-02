@@ -4,22 +4,45 @@
   import OutputBox from "./lib/OutputBox.svelte";
   import Illustration from "./lib/Illustration.svelte";
   import Waves from "./lib/Waves.svelte";
+  import Tabs from "./lib/Tabs.svelte";
+  import { onMount } from "svelte";
+  import {chats}  from "./store";
+  import Translations from "./lib/Translations.svelte";
+
+
 
 </script>
 
-<Title />
-<main class="main">
-  <div class="translate-section">
-    <InputBox />
-    <OutputBox />
+<main class="main-view">
+  <Tabs/>
+  <div class="main-container">
+    <Title />
+    <div class="main">
+      <div class="translate-section">
+        <InputBox />
+        <OutputBox />
+      </div>
+      <div class="illustration"><Illustration /></div>
+    </div>
+    <Translations/>
   </div>
-  <div class="illustration"><Illustration /></div>
 </main>
 <div class="waves">
   <Waves />
 </div>
 
 <style>
+  .main-container{
+    padding-inline: 50px;
+
+  }
+
+  .main-view {
+    display: grid;
+    grid-template-columns: 200px 2fr;
+    grid-template-rows: 1fr;
+    overflow-x: hidden;
+  }
   .main {
     display: flex;
     justify-content: center;

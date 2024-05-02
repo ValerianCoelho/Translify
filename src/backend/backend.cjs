@@ -17,14 +17,14 @@ const translate = async (page, text) => {
       const interval = setInterval(async () => {
         const translatedText = await page.evaluate(() => {
           const textarea = document.querySelector("#TargetTextarea");
-          if (textarea) {
+          if (textarea ) {
             // @ts-ignore
             return textarea.value;
           }
           return ""; 
         });
 
-        if ( translatedText !== "" && translatedText !== prevText ) {
+        if ( translatedText !== "" && translatedText != prevText) {
           prevText = translatedText;
           clearInterval(interval);
           resolve(translatedText);

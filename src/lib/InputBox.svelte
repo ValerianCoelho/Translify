@@ -2,11 +2,12 @@
   import Voice from "./Voice.svelte";
   import Share from "./Share.svelte";
   import Copy from "./Copy.svelte";
-  import { outputText } from "./../store";
+  import { inputText, outputText } from "./../store";
   import { translatingMsg, networkErrorMsg, slowConnectionMsg, translationErrorMsg } from "./constants";
+  import { currentChat } from "./../store";
+  import { chats } from "./../store";
 
   let placeholderText = "Enter something";
-  let inputdata = "";
 
   const getTranslatedText = async () => {
     outputText.set(translatingMsg);
@@ -18,8 +19,8 @@
       outputText.set(slowConnectionMsg);
     }, 2000);
 
-    if (inputdata != "") {
-      fetch(`http://127.0.0.1:3000/${inputdata}`)
+    if ($inputText != "") {
+      fetch(`http://127.0.0.1:3000/${$inputText}`)
         .then((response) => {
           clearTimeout(timeoutId); // Clear the timeout if the fetch succeeds
           if (!response.ok) {
@@ -30,6 +31,8 @@
         })
         .then((data) => {
           outputText.set(data);
+          chats.addNewTranslation($inputText,data,$currentChat);
+          chats.saveToLocal()
         })
         .catch((error) => {
           outputText.set(networkErrorMsg);
@@ -52,7 +55,7 @@
   <textarea
     class="text"
     placeholder={placeholderText}
-    bind:value={inputdata}
+    bind:value={$inputText}
     rows="5"
   />
   <div class="action">
