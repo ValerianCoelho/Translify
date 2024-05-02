@@ -7,6 +7,7 @@ const translate = async (page, text) => {
     await page.evaluate(() => {
       const textarea = document.querySelector("#SourceTextarea");
       if (textarea) {
+        // @ts-ignore
         textarea.value = "";
       }
     });

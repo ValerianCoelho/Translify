@@ -34,7 +34,11 @@
 <style>
   .main-container{
     padding-inline: 50px;
-
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
 
   .main-view {

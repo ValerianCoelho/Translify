@@ -44,7 +44,7 @@
     outline: none;
     font-family: "Red Hat Display";
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 14px;
     &:hover {
       background-color: #0000008f;
       cursor: pointer;
@@ -69,7 +69,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     height: 100vh;
-    width: 200px;
+    width: 250px;
     position: fixed;
   }
   .tab {
@@ -80,8 +80,5 @@
     justify-content: flex-start;
     align-items: center;
     gap: 15px;
-
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
   }
 </style>
