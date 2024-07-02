@@ -40,6 +40,7 @@
     background-color: #282828;
     width: 100%;
     padding: 8px 18px;
+    height: 64px;
     border: none;
     outline: none;
     font-family: "Red Hat Display";
